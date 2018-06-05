@@ -11,15 +11,16 @@ namespace ProviderCancellationRule.Entities
         public decimal AmountBeforeTax { get; set; }
         public decimal PrepaySum { get; set; }
         public decimal RoomTypeCount { get; set; }
+        public decimal NightsCount { get; set; }
 
         public override string ToString()
         {
-            return $"amountAfterTax: {AmountBeforeTax}, prepaySum: {PrepaySum}, roomTypeCount: {RoomTypeCount}";
+            return $"amountAfterTax: {AmountBeforeTax}, prepaySum: {PrepaySum}, roomTypeCount: {RoomTypeCount}, noghtsCount: {NightsCount}";
         }
 
         public bool IsEmpty()
         {
-            return AmountBeforeTax == 0 && PrepaySum == 0 && RoomTypeCount == 0;
+            return AmountBeforeTax == 0 && PrepaySum == 0 && RoomTypeCount == 0 && NightsCount == 0;
         }
     }
 }

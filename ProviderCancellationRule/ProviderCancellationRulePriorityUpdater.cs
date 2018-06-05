@@ -146,7 +146,7 @@ namespace ProviderCancellationRule
         private Booking GetAvgBooking()
         {
             Booking booking = null;
-            string queryString = "SELECT ISNULL(AVG(b.amount_before_tax),0) amount_before_tax, ISNULL(AVG(b.prepay_sum),0) prepay_sum, ISNULL(AVG(brt.count),0) booking_room_type_count FROM booking b " + // $"SELECT AVG(amount_after_tax/brt.count) FROM booking b " +
+            string queryString = "SELECT ISNULL(AVG(b.amount_before_tax),0) amount_before_tax, ISNULL(AVG(b.prepay_sum),0) prepay_sum, ISNULL(AVG(brt.count),0) booking_room_type_count, ISNULL(AVG(CAST(b.nights as decimal)), 0) nights_count FROM booking b " + // $"SELECT AVG(amount_after_tax/brt.count) FROM booking b " +
                                  "LEFT JOIN (SELECT id_booking, COUNT(*) [count] FROM booking_room_type GROUP BY id_booking ) brt ON b.id_booking = brt.id_booking " +
                                  $"WHERE id_provider={_provider.Id} and creation_date >= DATEADD(month, -{LastPeriodInMonth}, GETDATE())";
             using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -158,11 +158,12 @@ namespace ProviderCancellationRule
                 {
                     while ( reader.Read() )
                     {
-                        booking = new Booking()
+                        booking = new Booking
                         {
                             AmountBeforeTax = Convert.ToDecimal( reader[ "amount_before_tax" ] ),
                             PrepaySum = Convert.ToDecimal( reader[ "prepay_sum" ] ),
-                            RoomTypeCount = Convert.ToDecimal( reader[ "booking_room_type_count" ] )
+                            RoomTypeCount = Convert.ToDecimal( reader[ "booking_room_type_count" ] ),
+                            NightsCount = Convert.ToDecimal( reader[ "nights_count" ] )
                         };
                     }
                 }

@@ -56,6 +56,8 @@ namespace ProviderCancellationRule
                 }
             }
 
+            penalty = penalty / cancellationRuleConditions.Count;
+
             _logger.Info( $"\tCancellationRule penalty={penalty}" );
             return penalty;
         }
